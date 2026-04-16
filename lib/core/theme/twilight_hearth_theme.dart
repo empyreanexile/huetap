@@ -121,11 +121,7 @@ class TwilightHearthGradients {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     stops: <double>[0.0, 0.6, 1.0],
-    colors: <Color>[
-      Color(0xFF7A5E80),
-      Color(0xFFA285A8),
-      Color(0xFFC8A0C8),
-    ],
+    colors: <Color>[Color(0xFF7A5E80), Color(0xFFA285A8), Color(0xFFC8A0C8)],
   );
 
   // 135deg: charcoal → plum-deep → plum. For FAB, primary button, brand dot.
@@ -133,21 +129,14 @@ class TwilightHearthGradients {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     stops: <double>[0.0, 0.6, 1.0],
-    colors: <Color>[
-      Color(0xFF2D2926),
-      Color(0xFF5F4864),
-      Color(0xFF7A5E80),
-    ],
+    colors: <Color>[Color(0xFF2D2926), Color(0xFF5F4864), Color(0xFF7A5E80)],
   );
 
   // 145deg: cream-alt → warm cream. For hero cards.
   static const LinearGradient hero = LinearGradient(
     begin: Alignment(-0.6, -1.0),
     end: Alignment(0.6, 1.0),
-    colors: <Color>[
-      Color(0xFFFFFCF7),
-      Color(0xFFFFF4E8),
-    ],
+    colors: <Color>[Color(0xFFFFFCF7), Color(0xFFFFF4E8)],
   );
 
   // Radial cream body: applied on the root scaffold via a Container decoration
@@ -157,11 +146,7 @@ class TwilightHearthGradients {
     center: Alignment(0, -1),
     radius: 1.4,
     stops: <double>[0.0, 0.55, 1.0],
-    colors: <Color>[
-      Color(0xFFF5ECE0),
-      Color(0xFFEBDFCC),
-      Color(0xFFE0D2B8),
-    ],
+    colors: <Color>[Color(0xFFF5ECE0), Color(0xFFEBDFCC), Color(0xFFE0D2B8)],
   );
 
   // 180deg charcoal overlay for modal scrims.
@@ -199,12 +184,13 @@ class TwilightHearthTheme {
       outlineVariant: TwilightHearthColors.divider,
     );
 
-    final TextTheme textTheme = GoogleFonts.nunitoTextTheme(
-      ThemeData(brightness: Brightness.light).textTheme,
-    ).apply(
-      bodyColor: TwilightHearthColors.text,
-      displayColor: TwilightHearthColors.text,
-    );
+    final TextTheme textTheme =
+        GoogleFonts.nunitoTextTheme(
+          ThemeData(brightness: Brightness.light).textTheme,
+        ).apply(
+          bodyColor: TwilightHearthColors.text,
+          displayColor: TwilightHearthColors.text,
+        );
 
     return ThemeData(
       useMaterial3: true,

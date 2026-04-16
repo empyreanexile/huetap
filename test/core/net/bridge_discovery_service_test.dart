@@ -13,10 +13,16 @@ void main() {
   test('walks PTR → SRV → A and yields unique bridges', () async {
     final client = _FakeClient(
       ptrs: [
-        const PtrResourceRecord('_hue._tcp.local', 0,
-            domainName: 'bridge1._hue._tcp.local'),
-        const PtrResourceRecord('_hue._tcp.local', 0,
-            domainName: 'bridge2._hue._tcp.local'),
+        const PtrResourceRecord(
+          '_hue._tcp.local',
+          0,
+          domainName: 'bridge1._hue._tcp.local',
+        ),
+        const PtrResourceRecord(
+          '_hue._tcp.local',
+          0,
+          domainName: 'bridge2._hue._tcp.local',
+        ),
       ],
       srvs: {
         'bridge1._hue._tcp.local': [
@@ -79,8 +85,11 @@ void main() {
   test('deduplicates repeat address records', () async {
     final client = _FakeClient(
       ptrs: [
-        const PtrResourceRecord('_hue._tcp.local', 0,
-            domainName: 'b._hue._tcp.local'),
+        const PtrResourceRecord(
+          '_hue._tcp.local',
+          0,
+          domainName: 'b._hue._tcp.local',
+        ),
       ],
       srvs: {
         'b._hue._tcp.local': [
@@ -118,11 +127,8 @@ void main() {
 
 /// In-memory discovery client for tests.
 class _FakeClient extends MDnsDiscoveryClient {
-  _FakeClient({
-    required this.ptrs,
-    required this.srvs,
-    required this.addrs,
-  }) : super.forOverrides();
+  _FakeClient({required this.ptrs, required this.srvs, required this.addrs})
+    : super.forOverrides();
 
   final List<PtrResourceRecord> ptrs;
   final Map<String, List<SrvResourceRecord>> srvs;

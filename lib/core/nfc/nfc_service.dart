@@ -243,8 +243,7 @@ class NfcWriteCancelled extends NfcWriteOutcome {
 
 sealed class NfcReadOutcome {
   const NfcReadOutcome();
-  const factory NfcReadOutcome.success({required String uuid}) =
-      NfcReadSuccess;
+  const factory NfcReadOutcome.success({required String uuid}) = NfcReadSuccess;
   const factory NfcReadOutcome.failure(String message) = NfcReadFailure;
 }
 

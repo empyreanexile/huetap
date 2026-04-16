@@ -27,7 +27,9 @@ void main() {
     // Fail fast if openssl isn't on PATH — the tests can't run without it.
     final which = await Process.run('where', ['openssl'], runInShell: true);
     if (which.exitCode != 0) {
-      markTestSkipped('openssl not on PATH — skipping pinning integration tests');
+      markTestSkipped(
+        'openssl not on PATH — skipping pinning integration tests',
+      );
       return;
     }
     tempDir = await Directory.systemTemp.createTemp('huetap_pin_test_');
@@ -146,13 +148,19 @@ Future<_TestCert> _generateCert(Directory dir, String label) async {
   final result = await Process.run('openssl', [
     'req',
     '-x509',
-    '-newkey', 'rsa:2048',
-    '-keyout', keyPath,
-    '-out', certPath,
-    '-days', '3650',
+    '-newkey',
+    'rsa:2048',
+    '-keyout',
+    keyPath,
+    '-out',
+    certPath,
+    '-days',
+    '3650',
     '-nodes',
-    '-subj', '/CN=127.0.0.1',
-    '-addext', 'subjectAltName=IP:127.0.0.1',
+    '-subj',
+    '/CN=127.0.0.1',
+    '-addext',
+    'subjectAltName=IP:127.0.0.1',
   ], runInShell: true);
   if (result.exitCode != 0) {
     throw StateError('openssl failed: ${result.stderr}');
@@ -194,8 +202,7 @@ class _HttpsEchoServer {
     return _HttpsEchoServer._(server);
   }
 
-  Uri uri(String path) =>
-      Uri.parse('https://127.0.0.1:${_server.port}$path');
+  Uri uri(String path) => Uri.parse('https://127.0.0.1:${_server.port}$path');
 
   Future<void> stop() => _server.close(force: true);
 }

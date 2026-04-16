@@ -66,8 +66,7 @@ class CardBindings extends Table {
 @DataClassName('TapLog')
 class TapLogs extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get bridgeRowId =>
-      integer().nullable().references(Bridges, #id)();
+  IntColumn get bridgeRowId => integer().nullable().references(Bridges, #id)();
   TextColumn get cardUuid => text().nullable()();
   TextColumn get cardLabel => text().nullable()();
   TextColumn get sceneId => text().nullable()();
@@ -92,9 +91,7 @@ class SettingsTable extends Table {
   List<String> get customConstraints => ['CHECK (id = 1)'];
 }
 
-@DriftDatabase(
-  tables: [Bridges, Scenes, CardBindings, TapLogs, SettingsTable],
-)
+@DriftDatabase(tables: [Bridges, Scenes, CardBindings, TapLogs, SettingsTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

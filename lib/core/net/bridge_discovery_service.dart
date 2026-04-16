@@ -68,15 +68,11 @@ class MDnsDiscoveryClient {
         ResourceRecordQuery.serverPointer(serviceName),
       );
 
-  Stream<SrvResourceRecord> srvLookup(String domainName) =>
-      _client!.lookup<SrvResourceRecord>(
-        ResourceRecordQuery.service(domainName),
-      );
+  Stream<SrvResourceRecord> srvLookup(String domainName) => _client!
+      .lookup<SrvResourceRecord>(ResourceRecordQuery.service(domainName));
 
-  Stream<IPAddressResourceRecord> addressLookup(String target) =>
-      _client!.lookup<IPAddressResourceRecord>(
-        ResourceRecordQuery.addressIPv4(target),
-      );
+  Stream<IPAddressResourceRecord> addressLookup(String target) => _client!
+      .lookup<IPAddressResourceRecord>(ResourceRecordQuery.addressIPv4(target));
 }
 
 /// mDNS bridge discovery.
@@ -98,22 +94,25 @@ class BridgeDiscoveryService {
     await client.start();
     final seen = <String>{}; // dedupe by ip+port
     try {
-      final ptrs = client.ptrLookup(_serviceName).timeout(
-        timeout,
-        onTimeout: (sink) => sink.close(),
-      );
+      final ptrs = client
+          .ptrLookup(_serviceName)
+          .timeout(timeout, onTimeout: (sink) => sink.close());
       await for (final ptr in ptrs) {
         // Remaining lookups share the same outer timeout budget; use a
         // short per-record cap so a stuck host doesn't block the rest.
-        final srvs = client.srvLookup(ptr.domainName).timeout(
-          const Duration(seconds: 2),
-          onTimeout: (sink) => sink.close(),
-        );
+        final srvs = client
+            .srvLookup(ptr.domainName)
+            .timeout(
+              const Duration(seconds: 2),
+              onTimeout: (sink) => sink.close(),
+            );
         await for (final srv in srvs) {
-          final addrs = client.addressLookup(srv.target).timeout(
-            const Duration(seconds: 2),
-            onTimeout: (sink) => sink.close(),
-          );
+          final addrs = client
+              .addressLookup(srv.target)
+              .timeout(
+                const Duration(seconds: 2),
+                onTimeout: (sink) => sink.close(),
+              );
           await for (final addr in addrs) {
             if (addr.address.type != InternetAddressType.IPv4) continue;
             final key = '${addr.address.address}:${srv.port}';

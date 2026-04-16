@@ -19,8 +19,7 @@ class BridgeScenesScreen extends ConsumerStatefulWidget {
   final Bridge bridge;
 
   @override
-  ConsumerState<BridgeScenesScreen> createState() =>
-      _BridgeScenesScreenState();
+  ConsumerState<BridgeScenesScreen> createState() => _BridgeScenesScreenState();
 }
 
 class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
@@ -40,7 +39,9 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
               ..where((t) => t.bridgeRowId.equals(widget.bridge.id)))
             .write(const ScenesCompanion(orphaned: Value(true)));
         for (final s in scenes) {
-          await db.into(db.scenes).insertOnConflictUpdate(
+          await db
+              .into(db.scenes)
+              .insertOnConflictUpdate(
                 ScenesCompanion.insert(
                   id: s.id,
                   bridgeRowId: widget.bridge.id,
@@ -62,8 +63,7 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final scenesAsync =
-        ref.watch(scenesForBridgeProvider(widget.bridge.id));
+    final scenesAsync = ref.watch(scenesForBridgeProvider(widget.bridge.id));
 
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -92,32 +92,34 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
           onRefresh: _refresh,
           child: scenesAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => ListView(
-              children: [Center(child: Text('Error: $e'))],
-            ),
+            error: (e, _) =>
+                ListView(children: [Center(child: Text('Error: $e'))]),
             data: (scenes) {
               if (scenes.isEmpty) {
                 return ListView(
                   padding: const EdgeInsets.all(24),
                   children: [
                     const SizedBox(height: 80),
-                    const Icon(Symbols.sunny,
-                        size: 48, color: TwilightHearthColors.plum),
+                    const Icon(
+                      Symbols.sunny,
+                      size: 48,
+                      color: TwilightHearthColors.plum,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       'No scenes yet',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Create a scene in the Hue app, then pull to refresh.',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: TwilightHearthColors.text2,
-                          ),
+                        color: TwilightHearthColors.text2,
+                      ),
                     ),
                   ],
                 );
@@ -125,10 +127,8 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: scenes.length,
-                itemBuilder: (ctx, i) => _SceneTile(
-                  scene: scenes[i],
-                  bridge: widget.bridge,
-                ),
+                itemBuilder: (ctx, i) =>
+                    _SceneTile(scene: scenes[i], bridge: widget.bridge),
               );
             },
           ),
@@ -162,8 +162,10 @@ class _SceneTile extends ConsumerWidget {
             color: TwilightHearthColors.amber.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Symbols.sunny,
-              color: TwilightHearthColors.plumDeep),
+          child: const Icon(
+            Symbols.sunny,
+            color: TwilightHearthColors.plumDeep,
+          ),
         ),
         title: Text(
           scene.name,
@@ -186,10 +188,7 @@ class _SceneTile extends ConsumerWidget {
           Expanded(
             child: Text(
               scene.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
             ),
           ),
         ],
@@ -211,9 +210,9 @@ class _SceneTile extends ConsumerWidget {
                 TapFireSuccess(:final sceneName) => 'Fired $sceneName',
                 TapFireFailure(:final message) => message,
               };
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message)));
             },
           ),
           ListTile(
@@ -225,8 +224,7 @@ class _SceneTile extends ConsumerWidget {
               showHueTapSheet<void>(
                 context,
                 isScrollControlled: true,
-                builder: (_) =>
-                    BindCardSheet(bridge: bridge, scene: scene),
+                builder: (_) => BindCardSheet(bridge: bridge, scene: scene),
               );
             },
           ),

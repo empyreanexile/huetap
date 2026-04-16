@@ -49,22 +49,24 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
     });
     final svc = ref.read(bridgeDiscoveryServiceProvider);
     _sub?.cancel();
-    _sub = svc.discover(timeout: const Duration(seconds: 6)).listen(
-      (b) {
-        if (!mounted) return;
-        setState(() {
-          if (!_found.any((x) => x.ip == b.ip)) _found.add(b);
-        });
-      },
-      onDone: () {
-        if (!mounted) return;
-        setState(() => _scanning = false);
-      },
-      onError: (_) {
-        if (!mounted) return;
-        setState(() => _scanning = false);
-      },
-    );
+    _sub = svc
+        .discover(timeout: const Duration(seconds: 6))
+        .listen(
+          (b) {
+            if (!mounted) return;
+            setState(() {
+              if (!_found.any((x) => x.ip == b.ip)) _found.add(b);
+            });
+          },
+          onDone: () {
+            if (!mounted) return;
+            setState(() => _scanning = false);
+          },
+          onError: (_) {
+            if (!mounted) return;
+            setState(() => _scanning = false);
+          },
+        );
   }
 
   void _pair(String ip) {
@@ -129,13 +131,18 @@ class _ScanStatus extends StatelessWidget {
             child: CircularProgressIndicator(strokeWidth: 2),
           )
         else
-          const Icon(Symbols.radar, size: 18,
-              color: TwilightHearthColors.text2),
+          const Icon(
+            Symbols.radar,
+            size: 18,
+            color: TwilightHearthColors.text2,
+          ),
         const SizedBox(width: 8),
         Text(
           scanning
               ? 'Scanning the network…'
-              : (count == 0 ? 'No bridges found' : 'Found $count bridge${count == 1 ? '' : 's'}'),
+              : (count == 0
+                    ? 'No bridges found'
+                    : 'Found $count bridge${count == 1 ? '' : 's'}'),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: TwilightHearthColors.text2,
             fontWeight: FontWeight.w600,
@@ -199,15 +206,18 @@ class _EmptyScanState extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('No bridges found',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              )),
+          Text(
+            'No bridges found',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 6),
           Text(
             'Make sure your phone is on the same Wi-Fi as the bridge. You can also rescan or enter an IP below.',
-            style: theme.textTheme.bodyMedium
-                ?.copyWith(color: TwilightHearthColors.text2),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: TwilightHearthColors.text2,
+            ),
           ),
           const SizedBox(height: 12),
           OutlinedButton.icon(
@@ -238,8 +248,10 @@ class _ManualIpCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Enter IP manually',
-              style: TextStyle(fontWeight: FontWeight.w700)),
+          const Text(
+            'Enter IP manually',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           TextField(
             controller: controller,

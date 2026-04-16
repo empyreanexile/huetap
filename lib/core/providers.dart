@@ -46,17 +46,21 @@ final pairedBridgesProvider = StreamProvider<List<Bridge>>((ref) {
 /// Streams `CardBindings` rows.
 final cardBindingsProvider = StreamProvider<List<CardBinding>>((ref) {
   final db = ref.watch(databaseProvider);
-  return (db.select(db.cardBindings)..where((t) => t.revoked.equals(false)))
-      .watch();
+  return (db.select(
+    db.cardBindings,
+  )..where((t) => t.revoked.equals(false))).watch();
 });
 
 /// Streams `Scenes` rows for one bridge row.
-final scenesForBridgeProvider =
-    StreamProvider.family<List<Scene>, int>((ref, bridgeRowId) {
+final scenesForBridgeProvider = StreamProvider.family<List<Scene>, int>((
+  ref,
+  bridgeRowId,
+) {
   final db = ref.watch(databaseProvider);
   return (db.select(db.scenes)
-        ..where((t) =>
-            t.bridgeRowId.equals(bridgeRowId) & t.orphaned.equals(false))
+        ..where(
+          (t) => t.bridgeRowId.equals(bridgeRowId) & t.orphaned.equals(false),
+        )
         ..orderBy([(t) => drift.OrderingTerm.asc(t.name)]))
       .watch();
 });
@@ -80,13 +84,15 @@ final bridgeClientsBootstrapProvider = FutureProvider<void>((ref) async {
     if (registry.byRowId(row.id) != null) continue; // already armed
     final c = credMap[row.bridgeId];
     if (c == null) continue; // needs re-pair (SPEC §5.9); UI handles this
-    registry.register(BridgeClient(
-      bridgeRowId: row.id,
-      bridgeId: row.bridgeId,
-      ip: row.ip,
-      applicationKey: c.applicationKey,
-      certFingerprintSha256: c.certFingerprintSha256,
-    ));
+    registry.register(
+      BridgeClient(
+        bridgeRowId: row.id,
+        bridgeId: row.bridgeId,
+        ip: row.ip,
+        applicationKey: c.applicationKey,
+        certFingerprintSha256: c.certFingerprintSha256,
+      ),
+    );
   }
 });
 
@@ -124,26 +130,31 @@ class PairingCoordinator {
 
     final now = DateTime.now();
     // Upsert by bridgeId (re-pair of same physical bridge updates row).
-    final existing = await (_db.select(_db.bridges)
-          ..where((t) => t.bridgeId.equals(result.bridgeId)))
-        .getSingleOrNull();
+    final existing = await (_db.select(
+      _db.bridges,
+    )..where((t) => t.bridgeId.equals(result.bridgeId))).getSingleOrNull();
     late final int rowId;
     if (existing == null) {
-      rowId = await _db.into(_db.bridges).insert(BridgesCompanion.insert(
-            ip: result.ip,
-            bridgeId: result.bridgeId,
-            name: drift.Value(result.name),
-            pairedAt: now,
-            lastReachable: drift.Value(now),
-          ));
+      rowId = await _db
+          .into(_db.bridges)
+          .insert(
+            BridgesCompanion.insert(
+              ip: result.ip,
+              bridgeId: result.bridgeId,
+              name: drift.Value(result.name),
+              pairedAt: now,
+              lastReachable: drift.Value(now),
+            ),
+          );
     } else {
       rowId = existing.id;
-      await (_db.update(_db.bridges)..where((t) => t.id.equals(rowId)))
-          .write(BridgesCompanion(
-        ip: drift.Value(result.ip),
-        name: drift.Value(result.name),
-        lastReachable: drift.Value(now),
-      ));
+      await (_db.update(_db.bridges)..where((t) => t.id.equals(rowId))).write(
+        BridgesCompanion(
+          ip: drift.Value(result.ip),
+          name: drift.Value(result.name),
+          lastReachable: drift.Value(now),
+        ),
+      );
     }
 
     // Build + register the armed client.
@@ -172,7 +183,9 @@ class PairingCoordinator {
               ..where((t) => t.bridgeRowId.equals(client.bridgeRowId)))
             .write(const ScenesCompanion(orphaned: drift.Value(true)));
         for (final s in scenes) {
-          await _db.into(_db.scenes).insertOnConflictUpdate(
+          await _db
+              .into(_db.scenes)
+              .insertOnConflictUpdate(
                 ScenesCompanion.insert(
                   id: s.id,
                   bridgeRowId: client.bridgeRowId,

@@ -39,8 +39,9 @@ class HueApiClient {
   final String _appKey;
   final Dio _dio;
 
-  Map<String, Object?> get _headers =>
-      <String, Object?>{'hue-application-key': _appKey};
+  Map<String, Object?> get _headers => <String, Object?>{
+    'hue-application-key': _appKey,
+  };
 
   /// `GET /clip/v2/resource/scene`, enriched with room/zone names resolved
   /// from parallel `GET /clip/v2/resource/{room,zone}` calls.

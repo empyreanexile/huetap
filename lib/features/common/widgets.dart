@@ -138,10 +138,7 @@ class HueTapStatusCard extends StatelessWidget {
               ),
             ),
           ],
-          if (actions.isNotEmpty) ...[
-            const SizedBox(height: 32),
-            ...actions,
-          ],
+          if (actions.isNotEmpty) ...[const SizedBox(height: 32), ...actions],
         ],
       ),
     );

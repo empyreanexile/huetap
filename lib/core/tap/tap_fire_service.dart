@@ -57,9 +57,10 @@ class TapFireService {
     final registry = _ref.read(bridgeClientRegistryProvider);
 
     // Phase 1: DB + registry lookup. No network here — failures are fast.
-    final binding = await (db.select(db.cardBindings)
-          ..where((t) => t.uuid.equals(uuid) & t.revoked.equals(false)))
-        .getSingleOrNull();
+    final binding =
+        await (db.select(db.cardBindings)
+              ..where((t) => t.uuid.equals(uuid) & t.revoked.equals(false)))
+            .getSingleOrNull();
     if (binding == null) {
       await _logFailure(
         db,
@@ -79,16 +80,19 @@ class TapFireService {
         cardLabel: binding.label,
         sceneId: binding.sceneId,
         errorType: 'BridgeNotArmed',
-        errorMessage: 'No BridgeClient registered for row ${binding.bridgeRowId}.',
+        errorMessage:
+            'No BridgeClient registered for row ${binding.bridgeRowId}.',
       );
       return const TapFireOutcome.failure('Bridge not armed. Re-pair?');
     }
 
-    final scene = await (db.select(db.scenes)
-          ..where((t) =>
-              t.id.equals(binding.sceneId) &
-              t.bridgeRowId.equals(binding.bridgeRowId)))
-        .getSingleOrNull();
+    final scene =
+        await (db.select(db.scenes)..where(
+              (t) =>
+                  t.id.equals(binding.sceneId) &
+                  t.bridgeRowId.equals(binding.bridgeRowId),
+            ))
+            .getSingleOrNull();
     if (scene == null || scene.orphaned) {
       await _logFailure(
         db,
@@ -97,8 +101,9 @@ class TapFireService {
         cardLabel: binding.label,
         sceneId: binding.sceneId,
         errorType: 'SceneOrphaned',
-        errorMessage:
-            scene == null ? 'Scene row missing.' : 'Scene marked orphaned.',
+        errorMessage: scene == null
+            ? 'Scene row missing.'
+            : 'Scene marked orphaned.',
       );
       return const TapFireOutcome.failure('Scene was deleted on the bridge');
     }
@@ -107,21 +112,27 @@ class TapFireService {
     try {
       await client.runExclusive(() => client.api.fireScene(binding.sceneId));
 
-      await (db.update(db.cardBindings)
-            ..where((t) => t.uuid.equals(binding.uuid)))
-          .write(CardBindingsCompanion(
-        lastTapped: Value(DateTime.now()),
-        tapCount: Value(binding.tapCount + 1),
-      ));
-      await db.into(db.tapLogs).insert(TapLogsCompanion.insert(
-            bridgeRowId: Value(binding.bridgeRowId),
-            cardUuid: Value(binding.uuid),
-            cardLabel: Value(binding.label),
-            sceneId: Value(binding.sceneId),
-            sceneName: Value(scene.name),
-            success: true,
-            timestamp: DateTime.now(),
-          ));
+      await (db.update(
+        db.cardBindings,
+      )..where((t) => t.uuid.equals(binding.uuid))).write(
+        CardBindingsCompanion(
+          lastTapped: Value(DateTime.now()),
+          tapCount: Value(binding.tapCount + 1),
+        ),
+      );
+      await db
+          .into(db.tapLogs)
+          .insert(
+            TapLogsCompanion.insert(
+              bridgeRowId: Value(binding.bridgeRowId),
+              cardUuid: Value(binding.uuid),
+              cardLabel: Value(binding.label),
+              sceneId: Value(binding.sceneId),
+              sceneName: Value(scene.name),
+              success: true,
+              timestamp: DateTime.now(),
+            ),
+          );
 
       return TapFireOutcome.success(sceneName: scene.name);
     } catch (e) {
@@ -161,20 +172,25 @@ class TapFireService {
       return const TapFireOutcome.failure('Bridge not armed. Re-pair?');
     }
 
-    final scene = await (db.select(db.scenes)
-          ..where((t) =>
-              t.id.equals(sceneId) & t.bridgeRowId.equals(bridgeRowId)))
-        .getSingleOrNull();
+    final scene =
+        await (db.select(db.scenes)..where(
+              (t) => t.id.equals(sceneId) & t.bridgeRowId.equals(bridgeRowId),
+            ))
+            .getSingleOrNull();
 
     try {
       await client.runExclusive(() => client.api.fireScene(sceneId));
-      await db.into(db.tapLogs).insert(TapLogsCompanion.insert(
-            bridgeRowId: Value(bridgeRowId),
-            sceneId: Value(sceneId),
-            sceneName: Value(scene?.name),
-            success: true,
-            timestamp: DateTime.now(),
-          ));
+      await db
+          .into(db.tapLogs)
+          .insert(
+            TapLogsCompanion.insert(
+              bridgeRowId: Value(bridgeRowId),
+              sceneId: Value(sceneId),
+              sceneName: Value(scene?.name),
+              success: true,
+              timestamp: DateTime.now(),
+            ),
+          );
       return TapFireOutcome.success(sceneName: scene?.name ?? sceneId);
     } catch (e) {
       await _logFailure(
@@ -199,17 +215,21 @@ class TapFireService {
     required String errorType,
     required String errorMessage,
   }) async {
-    await db.into(db.tapLogs).insert(TapLogsCompanion.insert(
-          bridgeRowId: Value(bridgeRowId),
-          cardUuid: Value(cardUuid),
-          cardLabel: Value(cardLabel),
-          sceneId: Value(sceneId),
-          sceneName: Value(sceneName),
-          success: false,
-          errorType: Value(errorType),
-          errorMessage: Value(errorMessage),
-          timestamp: DateTime.now(),
-        ));
+    await db
+        .into(db.tapLogs)
+        .insert(
+          TapLogsCompanion.insert(
+            bridgeRowId: Value(bridgeRowId),
+            cardUuid: Value(cardUuid),
+            cardLabel: Value(cardLabel),
+            sceneId: Value(sceneId),
+            sceneName: Value(sceneName),
+            success: false,
+            errorType: Value(errorType),
+            errorMessage: Value(errorMessage),
+            timestamp: DateTime.now(),
+          ),
+        );
   }
 }
 

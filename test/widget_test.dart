@@ -12,9 +12,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TwilightHearthTheme.build(),
-        home: const Scaffold(
-          body: Center(child: Text('HueTap')),
-        ),
+        home: const Scaffold(body: Center(child: Text('HueTap'))),
       ),
     );
     expect(find.text('HueTap'), findsOneWidget);

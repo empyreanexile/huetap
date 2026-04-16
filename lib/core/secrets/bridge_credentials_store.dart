@@ -126,10 +126,8 @@ class BridgeCredentialsStore {
     final bridges =
         (decoded['bridges'] as Map<String, Object?>?) ?? <String, Object?>{};
     return bridges.map(
-      (id, v) => MapEntry(
-        id,
-        BridgeCredentials.fromJson(v! as Map<String, Object?>),
-      ),
+      (id, v) =>
+          MapEntry(id, BridgeCredentials.fromJson(v! as Map<String, Object?>)),
     );
   }
 

@@ -101,7 +101,8 @@ void main() {
 
     final file = File('${tempDir.path}/bridge_credentials.json');
     expect(await file.exists(), isTrue);
-    final decoded = jsonDecode(await file.readAsString()) as Map<String, Object?>;
+    final decoded =
+        jsonDecode(await file.readAsString()) as Map<String, Object?>;
     expect(decoded['version'], 1);
     final bridges = decoded['bridges'] as Map<String, Object?>;
     expect(bridges.keys, ['bridge-xyz']);
@@ -134,10 +135,7 @@ void main() {
   test('no .tmp sibling left behind after a successful write', () async {
     await store.storeCredentials(
       'bridge-1',
-      const BridgeCredentials(
-        applicationKey: 'k',
-        certFingerprintSha256: 'fp',
-      ),
+      const BridgeCredentials(applicationKey: 'k', certFingerprintSha256: 'fp'),
     );
     final tmp = File('${tempDir.path}/bridge_credentials.json.tmp');
     expect(await tmp.exists(), isFalse);

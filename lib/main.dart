@@ -90,9 +90,9 @@ class _HueTapAppState extends State<HueTapApp> {
     // Push FireScreen on top of whatever's current. FireScreen auto-closes
     // the whole app via `SystemNavigator.pop()` when done, which in the
     // warm-start case returns the user to the previously focused app.
-    nav.push<void>(MaterialPageRoute<void>(
-      builder: (_) => FireScreen(uuid: uuid),
-    ));
+    nav.push<void>(
+      MaterialPageRoute<void>(builder: (_) => FireScreen(uuid: uuid)),
+    );
   }
 
   @override

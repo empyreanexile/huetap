@@ -58,7 +58,9 @@ class _BindCardSheetState extends ConsumerState<BindCardSheet> {
         switch (outcome) {
           case NfcWriteSuccess(uuid: final u):
             final db = ref.read(databaseProvider);
-            await db.into(db.cardBindings).insertOnConflictUpdate(
+            await db
+                .into(db.cardBindings)
+                .insertOnConflictUpdate(
                   CardBindingsCompanion.insert(
                     uuid: u,
                     label: label,
@@ -100,8 +102,8 @@ class _BindCardSheetState extends ConsumerState<BindCardSheet> {
             Text(
               'Scene: ${widget.scene.name}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: TwilightHearthColors.text2,
-                  ),
+                color: TwilightHearthColors.text2,
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -115,11 +117,14 @@ class _BindCardSheetState extends ConsumerState<BindCardSheet> {
             ),
             const SizedBox(height: 20),
             switch (_state) {
-              _BindState.idle =>
-                _StartBlock(onStart: _startBind, error: _error),
+              _BindState.idle => _StartBlock(
+                onStart: _startBind,
+                error: _error,
+              ),
               _BindState.writing => const _WritingBlock(),
-              _BindState.done =>
-                _DoneBlock(onClose: () => Navigator.pop(context)),
+              _BindState.done => _DoneBlock(
+                onClose: () => Navigator.pop(context),
+              ),
             },
           ],
         ),
@@ -145,11 +150,13 @@ class _StartBlock extends StatelessWidget {
               color: TwilightHearthColors.danger.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Row(children: [
-              const Icon(Symbols.error, color: TwilightHearthColors.danger),
-              const SizedBox(width: 8),
-              Expanded(child: Text(error!)),
-            ]),
+            child: Row(
+              children: [
+                const Icon(Symbols.error, color: TwilightHearthColors.danger),
+                const SizedBox(width: 8),
+                Expanded(child: Text(error!)),
+              ],
+            ),
           ),
         FilledButton.icon(
           onPressed: onStart,
@@ -176,16 +183,23 @@ class _WritingBlock extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: TwilightHearthShadows.elev,
           ),
-          child: const Icon(Symbols.nfc,
-              color: TwilightHearthColors.cream, size: 48),
+          child: const Icon(
+            Symbols.nfc,
+            color: TwilightHearthColors.cream,
+            size: 48,
+          ),
         ),
         const SizedBox(height: 16),
-        const Text('Waiting for tag…',
-            style: TextStyle(fontWeight: FontWeight.w700)),
+        const Text(
+          'Waiting for tag…',
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
         const SizedBox(height: 4),
-        const Text('Hold a blank NTAG card against the back of your phone.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: TwilightHearthColors.text2)),
+        const Text(
+          'Hold a blank NTAG card against the back of your phone.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: TwilightHearthColors.text2),
+        ),
         const SizedBox(height: 16),
         const CircularProgressIndicator(),
       ],
@@ -211,8 +225,10 @@ class _DoneBlock extends StatelessWidget {
           child: const Icon(Symbols.check, color: Colors.white, size: 44),
         ),
         const SizedBox(height: 12),
-        const Text('Card bound!',
-            style: TextStyle(fontWeight: FontWeight.w800)),
+        const Text(
+          'Card bound!',
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
         const SizedBox(height: 16),
         FilledButton(onPressed: onClose, child: const Text('Done')),
       ],

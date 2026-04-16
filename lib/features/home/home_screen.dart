@@ -49,8 +49,7 @@ class HomeScreen extends ConsumerWidget {
                 return const _EmptyBridgesState();
               }
               return bindingsAsync.when(
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => Center(child: Text('Error: $e')),
                 data: (bindings) =>
                     _PairedState(bridges: bridges, bindings: bindings),
@@ -229,8 +228,7 @@ class _PairedState extends ConsumerWidget {
             ),
           ),
         ),
-        for (final b in bridges)
-          _BridgeCard(bridge: b),
+        for (final b in bridges) _BridgeCard(bridge: b),
 
         const SizedBox(height: 20),
 
@@ -320,8 +318,7 @@ class _EmptyCardsState extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Symbols.nfc,
-              size: 32, color: TwilightHearthColors.plum),
+          const Icon(Symbols.nfc, size: 32, color: TwilightHearthColors.plum),
           const SizedBox(height: 12),
           Text(
             'No cards bound yet',
@@ -377,8 +374,7 @@ class _CardTile extends ConsumerWidget {
             color: TwilightHearthColors.lilac.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Symbols.nfc,
-              color: TwilightHearthColors.plumDeep),
+          child: const Icon(Symbols.nfc, color: TwilightHearthColors.plumDeep),
         ),
         title: Text(
           binding.label,
@@ -389,8 +385,10 @@ class _CardTile extends ConsumerWidget {
           '${binding.lastTapped != null ? ' · last: ${binding.lastTapped}' : ''}',
         ),
         trailing: IconButton(
-          icon: const Icon(Symbols.delete_outline,
-              color: TwilightHearthColors.danger),
+          icon: const Icon(
+            Symbols.delete_outline,
+            color: TwilightHearthColors.danger,
+          ),
           onPressed: () async {
             final db = ref.read(databaseProvider);
             await (db.update(db.cardBindings)

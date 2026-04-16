@@ -67,10 +67,10 @@ class _FireScreenState extends ConsumerState<FireScreen> {
               Text(
                 'Firing…',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: TwilightHearthColors.text2,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.3,
-                    ),
+                  color: TwilightHearthColors.text2,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                ),
               ),
             ],
           ),

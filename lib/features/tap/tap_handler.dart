@@ -63,18 +63,20 @@ class _TapHandlerState extends ConsumerState<TapHandler>
   Future<void> _startRead() async {
     if (_handle != null) return;
     try {
-      _handle = await _nfc.startRead(onResult: (outcome) async {
-        switch (outcome) {
-          case NfcReadSuccess(uuid: final uuid):
-            await _handleTap(uuid);
-          case NfcReadFailure():
-            // Silent — user likely tapped a random tag. Don't spam.
-            break;
-        }
-        // Restart for the next tap.
-        _handle = null;
-        if (mounted) _startRead();
-      });
+      _handle = await _nfc.startRead(
+        onResult: (outcome) async {
+          switch (outcome) {
+            case NfcReadSuccess(uuid: final uuid):
+              await _handleTap(uuid);
+            case NfcReadFailure():
+              // Silent — user likely tapped a random tag. Don't spam.
+              break;
+          }
+          // Restart for the next tap.
+          _handle = null;
+          if (mounted) _startRead();
+        },
+      );
     } catch (_) {
       // NFC unavailable or platform exception — app stays usable without
       // foreground NFC dispatch (pair / bind flows still work via their own
@@ -110,12 +112,13 @@ class _TapHandlerState extends ConsumerState<TapHandler>
     if (!ctx.mounted) return;
     ScaffoldMessenger.of(ctx).showSnackBar(
       SnackBar(
-        content: Row(children: [
-          Icon(isError ? Symbols.error : Symbols.check,
-              color: Colors.white),
-          const SizedBox(width: 8),
-          Expanded(child: Text(msg)),
-        ]),
+        content: Row(
+          children: [
+            Icon(isError ? Symbols.error : Symbols.check, color: Colors.white),
+            const SizedBox(width: 8),
+            Expanded(child: Text(msg)),
+          ],
+        ),
         backgroundColor: isError
             ? TwilightHearthColors.danger
             : TwilightHearthColors.charcoal,
@@ -129,11 +132,7 @@ class _TapHandlerState extends ConsumerState<TapHandler>
       children: [
         widget.child,
         if (_busy)
-          const Positioned(
-            top: 80,
-            right: 16,
-            child: _FiringIndicator(),
-          ),
+          const Positioned(top: 80, right: 16, child: _FiringIndicator()),
       ],
     );
   }

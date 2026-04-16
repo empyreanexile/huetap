@@ -22,13 +22,15 @@ void main() {
   setUp(() {
     db = AppDatabase.forTesting(NativeDatabase.memory());
     registry = BridgeClientRegistry();
-    container = ProviderContainer(overrides: [
-      databaseProvider.overrideWithValue(db),
-      bridgeClientRegistryProvider.overrideWithValue(registry),
-      // Short-circuit the bootstrap provider so fire() doesn't try to load
-      // credentials from disk during the test.
-      bridgeClientsBootstrapProvider.overrideWith((ref) async {}),
-    ]);
+    container = ProviderContainer(
+      overrides: [
+        databaseProvider.overrideWithValue(db),
+        bridgeClientRegistryProvider.overrideWithValue(registry),
+        // Short-circuit the bootstrap provider so fire() doesn't try to load
+        // credentials from disk during the test.
+        bridgeClientsBootstrapProvider.overrideWith((ref) async {}),
+      ],
+    );
   });
 
   tearDown(() async {
@@ -54,24 +56,36 @@ void main() {
   test('bridge missing from registry → failure + tapLog', () async {
     // Seed a bridge row + a binding, but DON'T register a BridgeClient.
     final now = DateTime.now();
-    final bridgeRowId = await db.into(db.bridges).insert(BridgesCompanion.insert(
-          ip: '192.0.2.10',
-          bridgeId: 'abcd-1234',
-          pairedAt: now,
-        ));
-    await db.into(db.scenes).insert(ScenesCompanion.insert(
-          id: 'scene-1',
-          bridgeRowId: bridgeRowId,
-          name: 'Cozy Reading',
-          lastSynced: now,
-        ));
-    await db.into(db.cardBindings).insert(CardBindingsCompanion.insert(
-          uuid: 'uuid-1',
-          label: 'Test card',
-          bridgeRowId: bridgeRowId,
-          sceneId: 'scene-1',
-          createdAt: now,
-        ));
+    final bridgeRowId = await db
+        .into(db.bridges)
+        .insert(
+          BridgesCompanion.insert(
+            ip: '192.0.2.10',
+            bridgeId: 'abcd-1234',
+            pairedAt: now,
+          ),
+        );
+    await db
+        .into(db.scenes)
+        .insert(
+          ScenesCompanion.insert(
+            id: 'scene-1',
+            bridgeRowId: bridgeRowId,
+            name: 'Cozy Reading',
+            lastSynced: now,
+          ),
+        );
+    await db
+        .into(db.cardBindings)
+        .insert(
+          CardBindingsCompanion.insert(
+            uuid: 'uuid-1',
+            label: 'Test card',
+            bridgeRowId: bridgeRowId,
+            sceneId: 'scene-1',
+            createdAt: now,
+          ),
+        );
 
     final outcome = await container.read(tapFireServiceProvider).fire('uuid-1');
 
@@ -87,35 +101,49 @@ void main() {
 
   test('orphaned scene → failure + tapLog', () async {
     final now = DateTime.now();
-    final bridgeRowId = await db.into(db.bridges).insert(BridgesCompanion.insert(
-          ip: '192.0.2.10',
-          bridgeId: 'abcd-1234',
-          pairedAt: now,
-        ));
-    await db.into(db.scenes).insert(ScenesCompanion.insert(
-          id: 'scene-1',
-          bridgeRowId: bridgeRowId,
-          name: 'Deleted Scene',
-          orphaned: const drift.Value(true),
-          lastSynced: now,
-        ));
-    await db.into(db.cardBindings).insert(CardBindingsCompanion.insert(
-          uuid: 'uuid-1',
-          label: 'Test card',
-          bridgeRowId: bridgeRowId,
-          sceneId: 'scene-1',
-          createdAt: now,
-        ));
+    final bridgeRowId = await db
+        .into(db.bridges)
+        .insert(
+          BridgesCompanion.insert(
+            ip: '192.0.2.10',
+            bridgeId: 'abcd-1234',
+            pairedAt: now,
+          ),
+        );
+    await db
+        .into(db.scenes)
+        .insert(
+          ScenesCompanion.insert(
+            id: 'scene-1',
+            bridgeRowId: bridgeRowId,
+            name: 'Deleted Scene',
+            orphaned: const drift.Value(true),
+            lastSynced: now,
+          ),
+        );
+    await db
+        .into(db.cardBindings)
+        .insert(
+          CardBindingsCompanion.insert(
+            uuid: 'uuid-1',
+            label: 'Test card',
+            bridgeRowId: bridgeRowId,
+            sceneId: 'scene-1',
+            createdAt: now,
+          ),
+        );
     // Register a dummy client so the registry lookup passes and we fall
     // through to the scene check.
-    registry.register(BridgeClient(
-      bridgeRowId: bridgeRowId,
-      bridgeId: 'abcd-1234',
-      ip: '192.0.2.10',
-      applicationKey: 'k',
-      certFingerprintSha256:
-          '0000000000000000000000000000000000000000000000000000000000000000',
-    ));
+    registry.register(
+      BridgeClient(
+        bridgeRowId: bridgeRowId,
+        bridgeId: 'abcd-1234',
+        ip: '192.0.2.10',
+        applicationKey: 'k',
+        certFingerprintSha256:
+            '0000000000000000000000000000000000000000000000000000000000000000',
+      ),
+    );
 
     final outcome = await container.read(tapFireServiceProvider).fire('uuid-1');
 
@@ -129,28 +157,41 @@ void main() {
 
   test('revoked binding → treated as unknown', () async {
     final now = DateTime.now();
-    final bridgeRowId = await db.into(db.bridges).insert(BridgesCompanion.insert(
-          ip: '192.0.2.10',
-          bridgeId: 'abcd-1234',
-          pairedAt: now,
-        ));
-    await db.into(db.scenes).insert(ScenesCompanion.insert(
-          id: 'scene-1',
-          bridgeRowId: bridgeRowId,
-          name: 'Scene',
-          lastSynced: now,
-        ));
-    await db.into(db.cardBindings).insert(CardBindingsCompanion.insert(
-          uuid: 'revoked-uuid',
-          label: 'Old card',
-          bridgeRowId: bridgeRowId,
-          sceneId: 'scene-1',
-          revoked: const drift.Value(true),
-          createdAt: now,
-        ));
+    final bridgeRowId = await db
+        .into(db.bridges)
+        .insert(
+          BridgesCompanion.insert(
+            ip: '192.0.2.10',
+            bridgeId: 'abcd-1234',
+            pairedAt: now,
+          ),
+        );
+    await db
+        .into(db.scenes)
+        .insert(
+          ScenesCompanion.insert(
+            id: 'scene-1',
+            bridgeRowId: bridgeRowId,
+            name: 'Scene',
+            lastSynced: now,
+          ),
+        );
+    await db
+        .into(db.cardBindings)
+        .insert(
+          CardBindingsCompanion.insert(
+            uuid: 'revoked-uuid',
+            label: 'Old card',
+            bridgeRowId: bridgeRowId,
+            sceneId: 'scene-1',
+            revoked: const drift.Value(true),
+            createdAt: now,
+          ),
+        );
 
-    final outcome =
-        await container.read(tapFireServiceProvider).fire('revoked-uuid');
+    final outcome = await container
+        .read(tapFireServiceProvider)
+        .fire('revoked-uuid');
 
     expect(outcome, isA<TapFireFailure>());
     expect((outcome as TapFireFailure).message, 'Unknown card');

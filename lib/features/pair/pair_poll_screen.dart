@@ -50,14 +50,15 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
         .read(pairingCoordinatorProvider)
         .pair(widget.ip)
         .then<void>((client) {
-      if (!mounted) return;
-      setState(() => _result = AsyncValue.data(client));
-      _tick?.cancel();
-    }).catchError((Object e, StackTrace st) {
-      if (!mounted) return;
-      setState(() => _result = AsyncValue.error(e, st));
-      _tick?.cancel();
-    });
+          if (!mounted) return;
+          setState(() => _result = AsyncValue.data(client));
+          _tick?.cancel();
+        })
+        .catchError((Object e, StackTrace st) {
+          if (!mounted) return;
+          setState(() => _result = AsyncValue.error(e, st));
+          _tick?.cancel();
+        });
   }
 
   @override
@@ -81,10 +82,8 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
         ),
         body: Center(
           child: _result.when(
-            loading: () => _WaitingView(
-              ip: widget.ip,
-              secondsLeft: _secondsLeft,
-            ),
+            loading: () =>
+                _WaitingView(ip: widget.ip, secondsLeft: _secondsLeft),
             data: (client) => HueTapStatusCard(
               icon: Symbols.check,
               iconColor: TwilightHearthColors.meadow,
@@ -103,8 +102,9 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
               icon: Symbols.close,
               iconColor: TwilightHearthColors.danger,
               title: 'Pair failed',
-              description:
-                  e is BridgePairingException ? e.message : e.toString(),
+              description: e is BridgePairingException
+                  ? e.message
+                  : e.toString(),
               actions: [
                 FilledButton.icon(
                   onPressed: _startPair,
@@ -139,10 +139,7 @@ class _WaitingView extends StatelessWidget {
       description:
           'Push the large round button on top of your Hue bridge at $ip.',
       actions: [
-        CircularProgressIndicator(
-          value: secondsLeft / 60,
-          strokeWidth: 6,
-        ),
+        CircularProgressIndicator(value: secondsLeft / 60, strokeWidth: 6),
         const SizedBox(height: 12),
         Text(
           '${secondsLeft}s remaining',
