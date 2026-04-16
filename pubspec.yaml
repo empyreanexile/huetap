@@ -26,9 +26,12 @@ dependencies:
 
   # NFC read/write/wipe.
   nfc_manager: ^4.2.1
+  # NDEF record encoding (transitive via nfc_manager, listed direct because
+  # we construct records ourselves).
+  ndef_record: ^1.4.2
 
   # Crash reporting (opt-in, SaaS). No dio integration is registered (see SPEC §6.9).
-  sentry_flutter: ^8.14.2
+  sentry_flutter: ^9.17.0
 
   # mDNS discovery for Hue bridges.
   multicast_dns: ^0.3.3
@@ -43,6 +46,24 @@ dependencies:
   # Default Flutter template dep; retained for standard Material icon support.
   cupertino_icons: ^1.0.8
 
+  # Foundational support (not explicitly listed in SPEC §4.1):
+  # - path_provider: locate the app's internal files/ dir for the Drift DB and
+  #   the files/no_backup/ dir for bridge credentials (SPEC §6.4, §6.10).
+  # - crypto: SHA-256 of the bridge's self-signed cert for TOFU pinning
+  #   (SPEC §6.2).
+  path_provider: ^2.1.5
+  crypto: ^3.0.6
+  # UUID v4 generation for card bindings (SPEC §5.3: each bound card gets a
+  # fresh UUID written into the URI record).
+  uuid: ^4.5.1
+
+  # Android launch-intent & onNewIntent bridge — lets main() read the
+  # `huetap://c/<uuid>` URI that Android delivered via the NDEF_DISCOVERED
+  # intent filter and dispatch straight to the fire path, so tap-to-fire
+  # feels instant instead of waiting for the foreground NFC reader to pick
+  # up a second read.
+  app_links: ^6.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,8 +76,16 @@ dev_dependencies:
 # Pin win32 to the 5.x line — 6.x triggers Dart's experimental native-asset
 # build hooks which fail on some Windows dev environments. Revisit when
 # Flutter's native-asset support stabilizes.
+#
+# package_info_plus is pinned alongside because 10.x uses win32 6.x APIs
+# (toPcwstr, .value, .error, 4-arg GetFileVersionInfo) that do not exist in
+# win32 5.x — without this pin the Android build fails even though win32
+# only runs on Windows, because Dart's kernel compiler resolves imports
+# eagerly across all platforms. 8.3.1 is the last release that depends on
+# win32 ^5.5.3. Drop both overrides together when we move off win32 5.x.
 dependency_overrides:
   win32: ^5.13.0
+  package_info_plus: 8.3.1
 
 flutter:
   uses-material-design: true
