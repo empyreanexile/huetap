@@ -157,8 +157,9 @@ Future<_TestCert> _generateCert(Directory dir) async {
     '-addext',
     'subjectAltName=IP:127.0.0.1',
   ], runInShell: true);
-  if (result.exitCode != 0)
+  if (result.exitCode != 0) {
     throw StateError('openssl failed: ${result.stderr}');
+  }
   final pem = await File(certPath).readAsString();
   final der = base64.decode(
     pem
