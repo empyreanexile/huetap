@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the specification
+    url: https://github.com/REPLACE_WITH_REPO_URL/blob/main/SPEC.md
+    about: Scope, architecture, and behavior are documented in SPEC.md. Please check there first.

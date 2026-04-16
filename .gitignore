@@ -1,0 +1,67 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code
+.vscode/
+
+# Flutter/Dart/Pub
+/build/
+/generated_plugin_registrant.dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+pubspec.lock
+
+# Symbolication
+app.*.symbols
+
+# Obfuscation
+app.*.map.json
+
+# Android
+/android/.gradle/
+/android/captures/
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
+/android/**/GeneratedPluginRegistrant.java
+/android/key.properties
+/android/app/*.jks
+/android/app/*.keystore
+**/android/**/gradle-wrapper.jar
+.gradle/
+
+# Web
+lib/generated_plugin_registrant.dart
+
+# Coverage
+coverage/
+
+# Generated Drift files (we commit by convention in some teams; default is ignore)
+**/*.g.dart
+**/*.freezed.dart
+
+# Sentry
+.env.sentry-build-plugin
+
+# Claude Code local settings (per-user overrides)
+.claude/settings.local.json
