@@ -1,6 +1,6 @@
 # HueTap
 
-https://github.com/empyreanexile/huetap/blob/main/Screenshot_20260417_031545.jpg
+![Alt Text](Screenshot_20260417_031545.jpg)
 
 [![CI](https://github.com/empyreanexile/huetap/actions/workflows/ci.yml/badge.svg)](https://github.com/empyreanexile/huetap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
