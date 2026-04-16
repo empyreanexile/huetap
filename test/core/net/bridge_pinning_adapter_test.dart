@@ -26,9 +26,7 @@ void main() {
   setUpAll(() async {
     // Fail fast if openssl isn't on PATH — the tests can't run without it.
     // Probe openssl directly so this works on both Windows and Unix runners.
-    final probe = await Process.run('openssl', [
-      'version',
-    ], runInShell: true);
+    final probe = await Process.run('openssl', ['version'], runInShell: true);
     if (probe.exitCode != 0) {
       markTestSkipped(
         'openssl not on PATH — skipping pinning integration tests',
