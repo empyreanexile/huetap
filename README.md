@@ -1,7 +1,7 @@
 # HueTap
 
-<img src="Screenshot_20260417_031545.jpg" width="800" height="600">
-<img src="Screenshot_20260417_031552.jpg" width="800" height="600">
+<img src="Screenshot_20260417_031545.jpg" width="1200" height="1920">
+<img src="Screenshot_20260417_031552.jpg" width="1200" height="1920">
 
 [![CI](https://github.com/empyreanexile/huetap/actions/workflows/ci.yml/badge.svg)](https://github.com/empyreanexile/huetap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
