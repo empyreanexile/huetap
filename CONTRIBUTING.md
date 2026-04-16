@@ -16,7 +16,7 @@ Use the [issue templates](.github/ISSUE_TEMPLATE). Bug reports must include devi
 ## Pull requests
 
 - One logical change per PR.
-- Include tests for new behavior (see §7.1 of the spec for coverage targets).
+- Include tests for new behavior (see [spec/testing.md](spec/testing.md) for coverage targets).
 - Run `dart format .` before committing.
 - `flutter analyze` must pass with zero warnings.
 - `flutter test` must pass.
@@ -25,7 +25,7 @@ Use the [issue templates](.github/ISSUE_TEMPLATE). Bug reports must include devi
 ## Code style
 
 - Follow `dart format` defaults.
-- Clean-architecture layout: `data/`, `domain/`, `presentation/` inside each feature (see §4.2).
+- Clean-architecture layout: `data/`, `domain/`, `presentation/` inside each feature (see [spec/architecture.md#code-organization](spec/architecture.md#code-organization)).
 - Riverpod providers live under `presentation/providers/` per feature.
 - No hardcoded user-facing strings outside of ARB files (`lib/l10n/`).
 
@@ -37,7 +37,7 @@ The spec requires pinning Riverpod to a specific 3.x minor. The chosen version i
 
 ## Translations
 
-See `docs/i18n.md` once published. In short: copy `lib/l10n/app_en.arb` to `lib/l10n/app_<locale>.arb`, translate values, submit a PR.
+See [docs/i18n.md](docs/i18n.md). Two starter locales (`en_US`, `en_GB`) sit alongside the canonical `app_en.arb` template. To contribute another language, copy `lib/l10n/app_en.arb` to `lib/l10n/app_<locale>.arb`, translate values, and submit a PR.
 
 ## License
 

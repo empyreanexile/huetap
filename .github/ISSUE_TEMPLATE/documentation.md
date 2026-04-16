@@ -7,7 +7,7 @@ labels: documentation
 
 ## Location
 
-<!-- File and section (e.g. SPEC.md §5.6, README.md, docs/troubleshooting.md). -->
+<!-- File and section (e.g. spec/flows.md#nfc-tap-behavior, README.md, docs/troubleshooting.md). -->
 
 ## Issue
 

@@ -33,21 +33,21 @@ lib/
 - **Scenes have composite PK `(id, bridgeRowId)`** — Hue scene UUIDs are bridge-local. `CardBindings(sceneId, bridgeRowId) → Scenes(id, bridgeRowId)` is a composite FK that transitively guarantees binding-to-bridge integrity.
 - **Three NFC launch paths** wired in `main.dart`: icon tap → HomeScreen; cold NFC (process dead) → `getInitialLink()` → FireScreen in place of HomeScreen; warm NFC (process alive, backgrounded) → `uriLinkStream` → FireScreen pushed on top and dismissed after fire.
 
-## Where SPEC sections live
+## Where spec sections live
 
-| SPEC § | Code |
+| Spec section | Code |
 |---|---|
-| §5.2 Pair bridge | [lib/core/net/bridge_pairing_service.dart](../lib/core/net/bridge_pairing_service.dart), [lib/features/pair/](../lib/features/pair) |
-| §5.3 Scene sync | [lib/core/net/hue_api_client.dart](../lib/core/net/hue_api_client.dart), [lib/features/scenes/bridge_scenes_screen.dart](../lib/features/scenes/bridge_scenes_screen.dart) |
-| §5.5 Bind card | [lib/core/nfc/](../lib/core/nfc), [lib/features/bind/](../lib/features/bind) |
-| §5.6 Tap to fire | [lib/core/tap/](../lib/core/tap), [lib/features/tap/](../lib/features/tap) |
-| §5.9 Re-pair | [lib/core/net/bridge_pinning_adapter.dart](../lib/core/net/bridge_pinning_adapter.dart) (service; UX TBD) |
-| §6.2 Cert pinning | [lib/core/net/bridge_pinning_adapter.dart](../lib/core/net/bridge_pinning_adapter.dart) |
-| §6.3 Schema | [lib/core/db/database.dart](../lib/core/db/database.dart) |
-| §6.4 Credentials file | [lib/core/secrets/bridge_credentials_store.dart](../lib/core/secrets/bridge_credentials_store.dart) |
-| §6.5 NFC intent routing | [android/app/src/main/AndroidManifest.xml](../android/app/src/main/AndroidManifest.xml), [lib/main.dart](../lib/main.dart) |
-| §6.10 Auto-backup | [android/app/src/main/res/xml/backup_rules.xml](../android/app/src/main/res/xml/backup_rules.xml), [data_extraction_rules.xml](../android/app/src/main/res/xml/data_extraction_rules.xml) |
+| [Bridge pairing](../spec/flows.md#bridge-pairing) | [lib/core/net/bridge_pairing_service.dart](../lib/core/net/bridge_pairing_service.dart), [lib/features/pair/](../lib/features/pair) |
+| [Scene sync](../spec/flows.md#scene-sync) | [lib/core/net/hue_api_client.dart](../lib/core/net/hue_api_client.dart), [lib/features/scenes/bridge_scenes_screen.dart](../lib/features/scenes/bridge_scenes_screen.dart) |
+| [NFC card binding](../spec/flows.md#nfc-card-binding) | [lib/core/nfc/](../lib/core/nfc), [lib/features/bind/](../lib/features/bind) |
+| [NFC tap behavior](../spec/flows.md#nfc-tap-behavior) | [lib/core/tap/](../lib/core/tap), [lib/features/tap/](../lib/features/tap) |
+| [Bridge re-pair](../spec/flows.md#bridge-re-pair) | [lib/core/net/bridge_pinning_adapter.dart](../lib/core/net/bridge_pinning_adapter.dart) (service; UX TBD) |
+| [Bridge communication](../spec/technical.md#bridge-communication) | [lib/core/net/bridge_pinning_adapter.dart](../lib/core/net/bridge_pinning_adapter.dart) |
+| [Database schema](../spec/technical.md#database-schema) | [lib/core/db/database.dart](../lib/core/db/database.dart) |
+| [Bridge credentials file](../spec/technical.md#bridge-credentials-file) | [lib/core/secrets/bridge_credentials_store.dart](../lib/core/secrets/bridge_credentials_store.dart) |
+| [NFC intent routing](../spec/technical.md#nfc-intent-routing) | [android/app/src/main/AndroidManifest.xml](../android/app/src/main/AndroidManifest.xml), [lib/main.dart](../lib/main.dart) |
+| [Auto-backup](../spec/technical.md#auto-backup) | [android/app/src/main/res/xml/backup_rules.xml](../android/app/src/main/res/xml/backup_rules.xml), [data_extraction_rules.xml](../android/app/src/main/res/xml/data_extraction_rules.xml) |
 
 ## Still to land
 
-See the [SPEC.md](../SPEC.md) sections tracked as open feature work in issue labels: §5.1 Onboarding, §5.7 Card detail, §5.8 Tap log UI, §5.9 Re-pair UI, §5.11 Manage bridges + bulk re-pair, §5.12 Debounced resync, §5.13 Settings, §6.9 Sentry wiring, §7.2 Mock bridge fixture.
+Tracked against the [user flows](../spec/flows.md) and [technical](../spec/technical.md) specs: onboarding, card detail, tap log UI, re-pair UI, manage bridges + bulk re-pair, debounced resync, settings, Sentry wiring, and the mocked bridge fixture.

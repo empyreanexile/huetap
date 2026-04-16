@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/tap/tap_fire_service.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 class FireScreen extends ConsumerStatefulWidget {
   const FireScreen({required this.uuid, super.key});
@@ -65,7 +66,7 @@ class _FireScreenState extends ConsumerState<FireScreen> {
               ),
               const SizedBox(height: 20),
               Text(
-                'Firing…',
+                AppLocalizations.of(context)!.tapFiringStatus,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: TwilightHearthColors.text2,
                   fontWeight: FontWeight.w600,

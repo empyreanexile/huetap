@@ -17,6 +17,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../core/nfc/nfc_service.dart';
 import '../../core/tap/tap_fire_service.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 class TapHandler extends ConsumerStatefulWidget {
   const TapHandler({required this.child, super.key});
@@ -96,9 +97,11 @@ class _TapHandlerState extends ConsumerState<TapHandler>
     setState(() => _busy = true);
     try {
       final outcome = await ref.read(tapFireServiceProvider).fire(uuid);
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context)!;
       switch (outcome) {
         case TapFireSuccess(sceneName: final name):
-          _toast('Fired $name');
+          _toast(l10n.tapFiredSnackbar(name));
         case TapFireFailure(message: final msg):
           _toast(msg, isError: true);
       }
@@ -149,10 +152,10 @@ class _FiringIndicator extends StatelessWidget {
         color: TwilightHearthColors.charcoal,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 14,
             height: 14,
             child: CircularProgressIndicator(
@@ -160,10 +163,10 @@ class _FiringIndicator extends StatelessWidget {
               color: TwilightHearthColors.cream,
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Text(
-            'Firing…',
-            style: TextStyle(
+            AppLocalizations.of(context)!.tapFiringStatus,
+            style: const TextStyle(
               color: TwilightHearthColors.cream,
               fontWeight: FontWeight.w600,
             ),

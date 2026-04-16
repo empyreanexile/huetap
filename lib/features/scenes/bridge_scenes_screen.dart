@@ -10,6 +10,7 @@ import '../../core/db/database.dart';
 import '../../core/providers.dart';
 import '../../core/tap/tap_fire_service.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 import '../bind/bind_card_sheet.dart';
 import '../common/widgets.dart';
 
@@ -63,6 +64,7 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final scenesAsync = ref.watch(scenesForBridgeProvider(widget.bridge.id));
 
     return DecoratedBox(
@@ -72,7 +74,7 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text(widget.bridge.name ?? 'Bridge'),
+          title: Text(widget.bridge.name ?? l10n.homeBridgeFallbackName),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
@@ -92,8 +94,11 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
           onRefresh: _refresh,
           child: scenesAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) =>
-                ListView(children: [Center(child: Text('Error: $e'))]),
+            error: (e, _) => ListView(
+              children: [
+                Center(child: Text(l10n.commonErrorMessage(e.toString()))),
+              ],
+            ),
             data: (scenes) {
               if (scenes.isEmpty) {
                 return ListView(
@@ -107,7 +112,7 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'No scenes yet',
+                      l10n.scenesEmptyTitle,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
@@ -115,7 +120,7 @@ class _BridgeScenesScreenState extends ConsumerState<BridgeScenesScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Create a scene in the Hue app, then pull to refresh.',
+                      l10n.scenesEmptyDescription,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: TwilightHearthColors.text2,
@@ -179,6 +184,7 @@ class _SceneTile extends ConsumerWidget {
   }
 
   void _showSceneActions(BuildContext context, WidgetRef ref, Scene scene) {
+    final l10n = AppLocalizations.of(context)!;
     showHueTapSheet<void>(
       context,
       header: Row(
@@ -198,8 +204,8 @@ class _SceneTile extends ConsumerWidget {
         children: [
           ListTile(
             leading: const Icon(Symbols.play_arrow),
-            title: const Text('Fire scene now'),
-            subtitle: const Text('Test the connection'),
+            title: Text(l10n.sceneActionFireNowTitle),
+            subtitle: Text(l10n.sceneActionFireNowSubtitle),
             onTap: () async {
               Navigator.pop(ctx);
               final outcome = await ref
@@ -207,7 +213,9 @@ class _SceneTile extends ConsumerWidget {
                   .fireDirect(bridgeRowId: bridge.id, sceneId: scene.id);
               if (!context.mounted) return;
               final message = switch (outcome) {
-                TapFireSuccess(:final sceneName) => 'Fired $sceneName',
+                TapFireSuccess(:final sceneName) => l10n.sceneFiredSnackbar(
+                  sceneName,
+                ),
                 TapFireFailure(:final message) => message,
               };
               ScaffoldMessenger.of(
@@ -217,8 +225,8 @@ class _SceneTile extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Symbols.nfc),
-            title: const Text('Bind to NFC card'),
-            subtitle: const Text('Write this scene to a blank tag'),
+            title: Text(l10n.sceneActionBindTitle),
+            subtitle: Text(l10n.sceneActionBindSubtitle),
             onTap: () {
               Navigator.pop(ctx);
               showHueTapSheet<void>(

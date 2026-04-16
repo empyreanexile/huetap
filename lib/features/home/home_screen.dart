@@ -13,6 +13,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../core/db/database.dart';
 import '../../core/providers.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 import '../common/widgets.dart';
 import '../pair/discovery_screen.dart';
 import '../scenes/bridge_scenes_screen.dart';
@@ -26,6 +27,7 @@ class HomeScreen extends ConsumerWidget {
     // Bootstrap the registry once — fire and forget.
     ref.watch(bridgeClientsBootstrapProvider);
 
+    final l10n = AppLocalizations.of(context)!;
     final bridgesAsync = ref.watch(pairedBridgesProvider);
     final bindingsAsync = ref.watch(cardBindingsProvider);
 
@@ -37,20 +39,22 @@ class HomeScreen extends ConsumerWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: const Text('HueTap'),
+            title: Text(l10n.homeAppBarTitle),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
           body: bridgesAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('Error: $e')),
+            error: (e, _) =>
+                Center(child: Text(l10n.commonErrorMessage(e.toString()))),
             data: (bridges) {
               if (bridges.isEmpty) {
                 return const _EmptyBridgesState();
               }
               return bindingsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('Error: $e')),
+                error: (e, _) =>
+                    Center(child: Text(l10n.commonErrorMessage(e.toString()))),
                 data: (bindings) =>
                     _PairedState(bridges: bridges, bindings: bindings),
               );
@@ -64,7 +68,7 @@ class HomeScreen extends ConsumerWidget {
                     backgroundColor: TwilightHearthColors.charcoal,
                     foregroundColor: TwilightHearthColors.cream,
                     icon: const Icon(Symbols.add),
-                    label: const Text('New'),
+                    label: Text(l10n.homeNewActionLabel),
                   ),
             orElse: () => null,
           ),
@@ -74,6 +78,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   void _showAddMenu(BuildContext context, List<Bridge> bridges) {
+    final l10n = AppLocalizations.of(context)!;
     showHueTapSheet<void>(
       context,
       builder: (ctx) => Column(
@@ -81,8 +86,8 @@ class HomeScreen extends ConsumerWidget {
         children: [
           ListTile(
             leading: const Icon(Symbols.nfc),
-            title: const Text('Bind a new card'),
-            subtitle: const Text('Pick a scene, then tap a blank tag'),
+            title: Text(l10n.homeAddSheetBindCardTitle),
+            subtitle: Text(l10n.homeAddSheetBindCardSubtitle),
             onTap: () {
               Navigator.pop(ctx);
               // If there's one bridge, jump straight to its scenes.
@@ -101,7 +106,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Symbols.hub),
-            title: const Text('Pair another bridge'),
+            title: Text(l10n.homeAddSheetPairBridgeTitle),
             onTap: () {
               Navigator.pop(ctx);
               Navigator.push(
@@ -118,9 +123,10 @@ class HomeScreen extends ConsumerWidget {
   }
 
   void _pickBridgeForScenes(BuildContext context, List<Bridge> bridges) {
+    final l10n = AppLocalizations.of(context)!;
     showHueTapSheet<void>(
       context,
-      title: 'Pick a bridge',
+      title: l10n.homePickBridgeSheetTitle,
       builder: (ctx) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -151,6 +157,7 @@ class _EmptyBridgesState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Center(
@@ -173,7 +180,7 @@ class _EmptyBridgesState extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'No bridge paired yet',
+              l10n.homeEmptyBridgesTitle,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w800,
                 letterSpacing: -0.3,
@@ -181,7 +188,7 @@ class _EmptyBridgesState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Find your Hue bridge on Wi-Fi, then press its link button.',
+              l10n.homeEmptyBridgesDescription,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: TwilightHearthColors.text2,
@@ -196,7 +203,7 @@ class _EmptyBridgesState extends StatelessWidget {
                 ),
               ),
               icon: const Icon(Symbols.radar),
-              label: const Text('Find bridge'),
+              label: Text(l10n.homeEmptyBridgesCta),
             ),
           ],
         ),
@@ -214,6 +221,7 @@ class _PairedState extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
       children: [
@@ -221,7 +229,7 @@ class _PairedState extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
-            'Bridges',
+            l10n.homeSectionBridges,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
               color: TwilightHearthColors.text2,
@@ -236,7 +244,7 @@ class _PairedState extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
-            'Bound cards',
+            l10n.homeSectionBoundCards,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
               color: TwilightHearthColors.text2,
@@ -277,7 +285,7 @@ class _BridgeCard extends StatelessWidget {
           child: const Icon(Symbols.hub, color: TwilightHearthColors.cream),
         ),
         title: Text(
-          bridge.name ?? 'Bridge',
+          bridge.name ?? AppLocalizations.of(context)!.homeBridgeFallbackName,
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         subtitle: Text('${bridge.ip} · ${bridge.bridgeId}'),
@@ -308,6 +316,7 @@ class _EmptyCardsState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -321,14 +330,14 @@ class _EmptyCardsState extends StatelessWidget {
           const Icon(Symbols.nfc, size: 32, color: TwilightHearthColors.plum),
           const SizedBox(height: 12),
           Text(
-            'No cards bound yet',
+            l10n.homeEmptyCardsTitle,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            'Pick a scene and tap a blank NTAG card to bind it.',
+            l10n.homeEmptyCardsDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: TwilightHearthColors.text2,
             ),
@@ -345,7 +354,7 @@ class _EmptyCardsState extends StatelessWidget {
               );
             },
             icon: const Icon(Symbols.add),
-            label: const Text('Pick a scene'),
+            label: Text(l10n.homeEmptyCardsCta),
           ),
         ],
       ),
@@ -381,8 +390,14 @@ class _CardTile extends ConsumerWidget {
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         subtitle: Text(
-          'Taps: ${binding.tapCount}'
-          '${binding.lastTapped != null ? ' · last: ${binding.lastTapped}' : ''}',
+          binding.lastTapped != null
+              ? AppLocalizations.of(context)!.homeCardTapsWithLastSubtitle(
+                  binding.tapCount,
+                  binding.lastTapped.toString(),
+                )
+              : AppLocalizations.of(
+                  context,
+                )!.homeCardTapsSubtitle(binding.tapCount),
         ),
         trailing: IconButton(
           icon: const Icon(

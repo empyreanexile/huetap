@@ -19,5 +19,5 @@ labels: enhancement
 
 ## Scope check
 
-- [ ] I've read [`SPEC.md`](../../SPEC.md) §3 (scope) and §14 (post-v1 backlog).
-- [ ] This is not already listed in §14.
+- [ ] I've read the [overview](../../spec/overview.md) (scope) and [backlog](../../spec/backlog.md) (post-v0.1 deferrals).
+- [ ] This is not already listed in the backlog.

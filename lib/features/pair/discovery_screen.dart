@@ -14,6 +14,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../core/net/bridge_discovery_service.dart';
 import '../../core/providers.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 import 'pair_poll_screen.dart';
 
 class DiscoveryScreen extends ConsumerStatefulWidget {
@@ -78,6 +79,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: TwilightHearthGradients.scaffoldBody,
@@ -85,14 +87,14 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('Find bridge'),
+          title: Text(l10n.discoveryScreenTitle),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
             IconButton(
               onPressed: _scanning ? null : _startScan,
               icon: const Icon(Symbols.refresh),
-              tooltip: 'Rescan',
+              tooltip: l10n.discoveryRescanTooltip,
             ),
           ],
         ),
@@ -122,6 +124,17 @@ class _ScanStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final String statusText;
+    if (scanning) {
+      statusText = l10n.discoveryStatusScanning;
+    } else if (count == 0) {
+      statusText = l10n.discoveryStatusNoBridges;
+    } else if (count == 1) {
+      statusText = l10n.discoveryStatusFoundOne;
+    } else {
+      statusText = l10n.discoveryStatusFoundMany(count);
+    }
     return Row(
       children: [
         if (scanning)
@@ -138,11 +151,7 @@ class _ScanStatus extends StatelessWidget {
           ),
         const SizedBox(width: 8),
         Text(
-          scanning
-              ? 'Scanning the network…'
-              : (count == 0
-                    ? 'No bridges found'
-                    : 'Found $count bridge${count == 1 ? '' : 's'}'),
+          statusText,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: TwilightHearthColors.text2,
             fontWeight: FontWeight.w600,
@@ -196,6 +205,7 @@ class _EmptyScanState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -207,14 +217,14 @@ class _EmptyScanState extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'No bridges found',
+            l10n.discoveryEmptyTitle,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            'Make sure your phone is on the same Wi-Fi as the bridge. You can also rescan or enter an IP below.',
+            l10n.discoveryEmptyDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: TwilightHearthColors.text2,
             ),
@@ -223,7 +233,7 @@ class _EmptyScanState extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: onRescan,
             icon: const Icon(Symbols.refresh),
-            label: const Text('Rescan'),
+            label: Text(l10n.commonRescan),
           ),
         ],
       ),
@@ -238,6 +248,7 @@ class _ManualIpCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -248,17 +259,17 @@ class _ManualIpCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Enter IP manually',
-            style: TextStyle(fontWeight: FontWeight.w700),
+          Text(
+            l10n.discoveryManualIpTitle,
+            style: const TextStyle(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),
           TextField(
             controller: controller,
             keyboardType: TextInputType.url,
-            decoration: const InputDecoration(
-              hintText: '192.168.1.10',
-              prefixIcon: Icon(Symbols.lan),
+            decoration: InputDecoration(
+              hintText: l10n.discoveryManualIpHint,
+              prefixIcon: const Icon(Symbols.lan),
             ),
           ),
           const SizedBox(height: 12),
@@ -270,7 +281,7 @@ class _ManualIpCard extends StatelessWidget {
                 if (ip.isNotEmpty) onSubmit(ip);
               },
               icon: const Icon(Symbols.check),
-              label: const Text('Pair'),
+              label: Text(l10n.discoveryManualIpSubmit),
             ),
           ),
         ],

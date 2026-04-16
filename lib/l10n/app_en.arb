@@ -1,15 +1,267 @@
 {
   "@@locale": "en",
+
   "appTitle": "HueTap",
   "@appTitle": {
     "description": "The name of the application."
   },
-  "scaffoldingPlaceholderTitle": "Scaffolding in progress",
-  "@scaffoldingPlaceholderTitle": {
-    "description": "Placeholder heading shown on the home screen while the app is still being built."
+
+  "commonDone": "Done",
+  "@commonDone": {
+    "description": "Label for a button that closes a success dialog or bottom sheet."
   },
-  "scaffoldingPlaceholderBody": "Repository scaffolding is set up against spec v1.4. Feature implementation has not started yet.",
-  "@scaffoldingPlaceholderBody": {
-    "description": "Placeholder body shown on the home screen while the app is still being built."
+  "commonBack": "Back",
+  "@commonBack": {
+    "description": "Label for a button that returns to the previous screen."
+  },
+  "commonTryAgain": "Try again",
+  "@commonTryAgain": {
+    "description": "Label for a button that retries a failed action."
+  },
+  "commonRescan": "Rescan",
+  "@commonRescan": {
+    "description": "Label for a button that restarts a network scan."
+  },
+  "commonErrorMessage": "Error: {message}",
+  "@commonErrorMessage": {
+    "description": "Generic error line shown when a screen fails to load.",
+    "placeholders": {
+      "message": { "type": "String", "example": "connection refused" }
+    }
+  },
+
+  "homeAppBarTitle": "HueTap",
+  "@homeAppBarTitle": {
+    "description": "AppBar title on the home screen. Usually the product name."
+  },
+  "homeNewActionLabel": "New",
+  "@homeNewActionLabel": {
+    "description": "Floating action button label on the home screen — opens a menu to add a card or bridge."
+  },
+  "homeAddSheetBindCardTitle": "Bind a new card",
+  "@homeAddSheetBindCardTitle": {
+    "description": "Menu item title: start the flow to bind an NFC card to a scene."
+  },
+  "homeAddSheetBindCardSubtitle": "Pick a scene, then tap a blank tag",
+  "@homeAddSheetBindCardSubtitle": {
+    "description": "Menu item subtitle explaining the bind flow."
+  },
+  "homeAddSheetPairBridgeTitle": "Pair another bridge",
+  "@homeAddSheetPairBridgeTitle": {
+    "description": "Menu item title: start the flow to pair an additional Hue bridge."
+  },
+  "homePickBridgeSheetTitle": "Pick a bridge",
+  "@homePickBridgeSheetTitle": {
+    "description": "Title of the bottom sheet shown when the user must choose among multiple paired bridges."
+  },
+  "homeEmptyBridgesTitle": "No bridge paired yet",
+  "@homeEmptyBridgesTitle": {
+    "description": "Empty-state headline shown when the user has no paired bridges."
+  },
+  "homeEmptyBridgesDescription": "Find your Hue bridge on Wi-Fi, then press its link button.",
+  "@homeEmptyBridgesDescription": {
+    "description": "Empty-state body shown when the user has no paired bridges."
+  },
+  "homeEmptyBridgesCta": "Find bridge",
+  "@homeEmptyBridgesCta": {
+    "description": "Primary call-to-action button label in the empty-bridges state."
+  },
+  "homeSectionBridges": "Bridges",
+  "@homeSectionBridges": {
+    "description": "Section header above the list of paired bridges."
+  },
+  "homeSectionBoundCards": "Bound cards",
+  "@homeSectionBoundCards": {
+    "description": "Section header above the list of NFC cards bound to scenes."
+  },
+  "homeBridgeFallbackName": "Bridge",
+  "@homeBridgeFallbackName": {
+    "description": "Placeholder title used when a bridge has no human-readable name yet."
+  },
+  "homeEmptyCardsTitle": "No cards bound yet",
+  "@homeEmptyCardsTitle": {
+    "description": "Empty-state headline shown when the user has no bound NFC cards."
+  },
+  "homeEmptyCardsDescription": "Pick a scene and tap a blank NTAG card to bind it.",
+  "@homeEmptyCardsDescription": {
+    "description": "Empty-state body shown when the user has no bound NFC cards."
+  },
+  "homeEmptyCardsCta": "Pick a scene",
+  "@homeEmptyCardsCta": {
+    "description": "Primary call-to-action button label in the empty-cards state."
+  },
+  "homeCardTapsSubtitle": "Taps: {count}",
+  "@homeCardTapsSubtitle": {
+    "description": "Card subtitle showing how many times this card has been tapped.",
+    "placeholders": {
+      "count": { "type": "int", "example": "12" }
+    }
+  },
+  "homeCardTapsWithLastSubtitle": "Taps: {count} · last: {lastTapped}",
+  "@homeCardTapsWithLastSubtitle": {
+    "description": "Card subtitle showing tap count and the timestamp of the most recent tap.",
+    "placeholders": {
+      "count": { "type": "int", "example": "12" },
+      "lastTapped": { "type": "String", "example": "2026-04-17 21:03" }
+    }
+  },
+
+  "discoveryScreenTitle": "Find bridge",
+  "@discoveryScreenTitle": {
+    "description": "AppBar title on the bridge discovery screen."
+  },
+  "discoveryRescanTooltip": "Rescan",
+  "@discoveryRescanTooltip": {
+    "description": "Tooltip on the rescan button in the discovery app bar."
+  },
+  "discoveryStatusScanning": "Scanning the network…",
+  "@discoveryStatusScanning": {
+    "description": "Status line shown while the network scan is in progress."
+  },
+  "discoveryStatusNoBridges": "No bridges found",
+  "@discoveryStatusNoBridges": {
+    "description": "Status line shown when a completed scan found no bridges."
+  },
+  "discoveryStatusFoundOne": "Found 1 bridge",
+  "@discoveryStatusFoundOne": {
+    "description": "Status line shown when a completed scan found exactly one bridge."
+  },
+  "discoveryStatusFoundMany": "Found {count} bridges",
+  "@discoveryStatusFoundMany": {
+    "description": "Status line shown when a completed scan found multiple bridges.",
+    "placeholders": {
+      "count": { "type": "int", "example": "3" }
+    }
+  },
+  "discoveryEmptyTitle": "No bridges found",
+  "@discoveryEmptyTitle": {
+    "description": "Empty-state card headline on the discovery screen."
+  },
+  "discoveryEmptyDescription": "Make sure your phone is on the same Wi-Fi as the bridge. You can also rescan or enter an IP below.",
+  "@discoveryEmptyDescription": {
+    "description": "Empty-state card body on the discovery screen."
+  },
+  "discoveryManualIpTitle": "Enter IP manually",
+  "@discoveryManualIpTitle": {
+    "description": "Card title for the manual-IP fallback on the discovery screen."
+  },
+  "discoveryManualIpHint": "192.168.1.10",
+  "@discoveryManualIpHint": {
+    "description": "Placeholder text in the manual-IP text field. An IPv4 address example."
+  },
+  "discoveryManualIpSubmit": "Pair",
+  "@discoveryManualIpSubmit": {
+    "description": "Button label that submits a manually entered IP and starts pairing."
+  },
+
+  "pairPollScreenTitle": "Pair bridge",
+  "@pairPollScreenTitle": {
+    "description": "AppBar title on the link-button polling screen."
+  },
+  "pairPollSuccessTitle": "Paired!",
+  "@pairPollSuccessTitle": {
+    "description": "Success banner title shown when pairing completes."
+  },
+  "pairPollFailedTitle": "Pair failed",
+  "@pairPollFailedTitle": {
+    "description": "Failure banner title shown when pairing fails."
+  },
+  "pairPollLinkButtonTitle": "Press the link button",
+  "@pairPollLinkButtonTitle": {
+    "description": "Instruction shown while polling the bridge for link-button confirmation."
+  },
+  "pairPollLinkButtonDescription": "Push the large round button on top of your Hue bridge at {ip}.",
+  "@pairPollLinkButtonDescription": {
+    "description": "Detailed instruction for the link-button step, including the bridge's IP.",
+    "placeholders": {
+      "ip": { "type": "String", "example": "192.168.1.10" }
+    }
+  },
+  "pairPollSecondsRemaining": "{seconds}s remaining",
+  "@pairPollSecondsRemaining": {
+    "description": "Countdown label beneath the circular progress indicator.",
+    "placeholders": {
+      "seconds": { "type": "int", "example": "42" }
+    }
+  },
+
+  "scenesEmptyTitle": "No scenes yet",
+  "@scenesEmptyTitle": {
+    "description": "Empty-state title on the scenes list for a bridge."
+  },
+  "scenesEmptyDescription": "Create a scene in the Hue app, then pull to refresh.",
+  "@scenesEmptyDescription": {
+    "description": "Empty-state body on the scenes list for a bridge."
+  },
+  "sceneActionFireNowTitle": "Fire scene now",
+  "@sceneActionFireNowTitle": {
+    "description": "Scene action-sheet option: fire this scene immediately to test it."
+  },
+  "sceneActionFireNowSubtitle": "Test the connection",
+  "@sceneActionFireNowSubtitle": {
+    "description": "Subtitle for the 'fire now' scene action explaining its purpose."
+  },
+  "sceneActionBindTitle": "Bind to NFC card",
+  "@sceneActionBindTitle": {
+    "description": "Scene action-sheet option: bind this scene to an NFC card."
+  },
+  "sceneActionBindSubtitle": "Write this scene to a blank tag",
+  "@sceneActionBindSubtitle": {
+    "description": "Subtitle for the 'bind' scene action explaining its purpose."
+  },
+  "sceneFiredSnackbar": "Fired {sceneName}",
+  "@sceneFiredSnackbar": {
+    "description": "SnackBar message shown after a scene fires successfully.",
+    "placeholders": {
+      "sceneName": { "type": "String", "example": "Movie night" }
+    }
+  },
+
+  "bindCardSheetTitle": "Bind a card",
+  "@bindCardSheetTitle": {
+    "description": "Bottom-sheet title for the card-binding flow."
+  },
+  "bindCardSceneLabel": "Scene: {sceneName}",
+  "@bindCardSceneLabel": {
+    "description": "Subtitle showing which scene the new card will be bound to.",
+    "placeholders": {
+      "sceneName": { "type": "String", "example": "Movie night" }
+    }
+  },
+  "bindCardLabelField": "Card label (optional)",
+  "@bindCardLabelField": {
+    "description": "Text field label where the user can name the card."
+  },
+  "bindCardLabelHint": "e.g. Nightstand",
+  "@bindCardLabelHint": {
+    "description": "Placeholder text in the card-label field. Example of a typical card location."
+  },
+  "bindCardStartButton": "Hold a blank card",
+  "@bindCardStartButton": {
+    "description": "Button that starts the NFC write session in the bind flow."
+  },
+  "bindCardWaitingTitle": "Waiting for tag…",
+  "@bindCardWaitingTitle": {
+    "description": "Status title shown while the phone is waiting for an NFC tag."
+  },
+  "bindCardWaitingDescription": "Hold a blank NTAG card against the back of your phone.",
+  "@bindCardWaitingDescription": {
+    "description": "Status body shown while the phone is waiting for an NFC tag."
+  },
+  "bindCardSuccessTitle": "Card bound!",
+  "@bindCardSuccessTitle": {
+    "description": "Status title shown after a card is successfully bound."
+  },
+
+  "tapFiringStatus": "Firing…",
+  "@tapFiringStatus": {
+    "description": "Status text shown on the cold-start fire screen and the foreground firing indicator."
+  },
+  "tapFiredSnackbar": "Fired {sceneName}",
+  "@tapFiredSnackbar": {
+    "description": "SnackBar message shown after a scene fires successfully from a foreground tap.",
+    "placeholders": {
+      "sceneName": { "type": "String", "example": "Movie night" }
+    }
   }
 }

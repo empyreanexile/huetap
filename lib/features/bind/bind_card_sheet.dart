@@ -11,6 +11,7 @@ import '../../core/db/database.dart';
 import '../../core/nfc/nfc_service.dart';
 import '../../core/providers.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 enum _BindState { idle, writing, done }
 
@@ -85,6 +86,7 @@ class _BindCardSheetState extends ConsumerState<BindCardSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final viewInsets = MediaQuery.of(context).viewInsets;
     return Padding(
       padding: EdgeInsets.only(bottom: viewInsets.bottom),
@@ -94,13 +96,13 @@ class _BindCardSheetState extends ConsumerState<BindCardSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Bind a card',
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
+            Text(
+              l10n.bindCardSheetTitle,
+              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
             ),
             const SizedBox(height: 4),
             Text(
-              'Scene: ${widget.scene.name}',
+              l10n.bindCardSceneLabel(widget.scene.name),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: TwilightHearthColors.text2,
               ),
@@ -109,10 +111,10 @@ class _BindCardSheetState extends ConsumerState<BindCardSheet> {
             TextField(
               controller: _labelCtrl,
               enabled: _state == _BindState.idle,
-              decoration: const InputDecoration(
-                labelText: 'Card label (optional)',
-                hintText: 'e.g. Nightstand',
-                prefixIcon: Icon(Symbols.label),
+              decoration: InputDecoration(
+                labelText: l10n.bindCardLabelField,
+                hintText: l10n.bindCardLabelHint,
+                prefixIcon: const Icon(Symbols.label),
               ),
             ),
             const SizedBox(height: 20),
@@ -161,7 +163,7 @@ class _StartBlock extends StatelessWidget {
         FilledButton.icon(
           onPressed: onStart,
           icon: const Icon(Symbols.nfc),
-          label: const Text('Hold a blank card'),
+          label: Text(AppLocalizations.of(context)!.bindCardStartButton),
         ),
       ],
     );
@@ -173,6 +175,7 @@ class _WritingBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Container(
@@ -190,15 +193,15 @@ class _WritingBlock extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        const Text(
-          'Waiting for tag…',
-          style: TextStyle(fontWeight: FontWeight.w700),
+        Text(
+          l10n.bindCardWaitingTitle,
+          style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 4),
-        const Text(
-          'Hold a blank NTAG card against the back of your phone.',
+        Text(
+          l10n.bindCardWaitingDescription,
           textAlign: TextAlign.center,
-          style: TextStyle(color: TwilightHearthColors.text2),
+          style: const TextStyle(color: TwilightHearthColors.text2),
         ),
         const SizedBox(height: 16),
         const CircularProgressIndicator(),
@@ -213,6 +216,7 @@ class _DoneBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Container(
@@ -225,12 +229,12 @@ class _DoneBlock extends StatelessWidget {
           child: const Icon(Symbols.check, color: Colors.white, size: 44),
         ),
         const SizedBox(height: 12),
-        const Text(
-          'Card bound!',
-          style: TextStyle(fontWeight: FontWeight.w800),
+        Text(
+          l10n.bindCardSuccessTitle,
+          style: const TextStyle(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 16),
-        FilledButton(onPressed: onClose, child: const Text('Done')),
+        FilledButton(onPressed: onClose, child: Text(l10n.commonDone)),
       ],
     );
   }

@@ -1,6 +1,6 @@
 # NFC Cards
 
-> **Stub.** Expand with specific product links and positioning photos once Phase 4 dogfooding completes.
+> **Stub.** Expand with specific product links and positioning photos as the app matures.
 
 ## Supported tag types
 
@@ -26,7 +26,7 @@ NTAG215 cards and stickers are sold in bulk on Amazon, AliExpress, and specialty
 
 ## Cloning and backups
 
-NTAG215 cards have a writable UID on some clones. HueTap **does not rely on the UID** — only the URI written to the card. A cloned card with the same URI behaves identically to the original, which means **you can make intentional backup copies** of an important card by scanning it into a second tag with the same URI (using a third-party NFC tool). This is by design; see SPEC §10.3.
+NTAG215 cards have a writable UID on some clones. HueTap **does not rely on the UID** — only the URI written to the card. A cloned card with the same URI behaves identically to the original, which means **you can make intentional backup copies** of an important card by scanning it into a second tag with the same URI (using a third-party NFC tool). This is by design; see [spec/privacy-security.md#security-considerations](../spec/privacy-security.md#security-considerations).
 
 ## Wipe and rebind
 

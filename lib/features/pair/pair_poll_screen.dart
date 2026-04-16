@@ -11,6 +11,7 @@ import '../../core/net/bridge_client.dart';
 import '../../core/net/bridge_pairing_service.dart';
 import '../../core/providers.dart';
 import '../../core/theme/twilight_hearth_theme.dart';
+import '../../l10n/gen/app_localizations.dart';
 import '../common/widgets.dart';
 
 class PairPollScreen extends ConsumerStatefulWidget {
@@ -69,6 +70,7 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: TwilightHearthGradients.scaffoldBody,
@@ -76,7 +78,7 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('Pair bridge'),
+          title: Text(l10n.pairPollScreenTitle),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -87,21 +89,21 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
             data: (client) => HueTapStatusCard(
               icon: Symbols.check,
               iconColor: TwilightHearthColors.meadow,
-              title: 'Paired!',
+              title: l10n.pairPollSuccessTitle,
               description: client.ip,
               actions: [
                 FilledButton.icon(
                   onPressed: () =>
                       Navigator.of(context).popUntil((r) => r.isFirst),
                   icon: const Icon(Symbols.home),
-                  label: const Text('Done'),
+                  label: Text(l10n.commonDone),
                 ),
               ],
             ),
             error: (e, _) => HueTapStatusCard(
               icon: Symbols.close,
               iconColor: TwilightHearthColors.danger,
-              title: 'Pair failed',
+              title: l10n.pairPollFailedTitle,
               description: e is BridgePairingException
                   ? e.message
                   : e.toString(),
@@ -109,12 +111,12 @@ class _PairPollScreenState extends ConsumerState<PairPollScreen> {
                 FilledButton.icon(
                   onPressed: _startPair,
                   icon: const Icon(Symbols.refresh),
-                  label: const Text('Try again'),
+                  label: Text(l10n.commonTryAgain),
                 ),
                 const SizedBox(height: 8),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Back'),
+                  child: Text(l10n.commonBack),
                 ),
               ],
             ),
@@ -132,17 +134,17 @@ class _WaitingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return HueTapStatusCard(
       icon: Symbols.touch_app,
       iconGradient: TwilightHearthGradients.primary,
-      title: 'Press the link button',
-      description:
-          'Push the large round button on top of your Hue bridge at $ip.',
+      title: l10n.pairPollLinkButtonTitle,
+      description: l10n.pairPollLinkButtonDescription(ip),
       actions: [
         CircularProgressIndicator(value: secondsLeft / 60, strokeWidth: 6),
         const SizedBox(height: 12),
         Text(
-          '${secondsLeft}s remaining',
+          l10n.pairPollSecondsRemaining(secondsLeft),
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
