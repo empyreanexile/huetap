@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+  "appTitle": "HueTap",
+  "@appTitle": {
+    "description": "The name of the application."
+  },
+  "scaffoldingPlaceholderTitle": "Scaffolding in progress",
+  "@scaffoldingPlaceholderTitle": {
+    "description": "Placeholder heading shown on the home screen while the app is still being built."
+  },
+  "scaffoldingPlaceholderBody": "Repository scaffolding is set up against spec v1.4. Feature implementation has not started yet.",
+  "@scaffoldingPlaceholderBody": {
+    "description": "Placeholder body shown on the home screen while the app is still being built."
+  }
+}

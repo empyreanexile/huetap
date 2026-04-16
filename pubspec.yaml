@@ -1,0 +1,64 @@
+name: huetap
+description: "Trigger Philips Hue scenes by tapping NFC cards. Android-only, local-only."
+publish_to: 'none'
+
+# versionName+versionCode for Android. See docs/architecture.md for bump policy.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management — pinned to a specific 3.x minor per SPEC §4.1.
+  # Document any bump in CHANGELOG and CONTRIBUTING.md.
+  flutter_riverpod: 3.3.1
+
+  # Local storage (SQLite).
+  drift: ^2.32.1
+
+  # HTTP client — used with per-bridge cert-pinning interceptors.
+  dio: ^5.9.2
+
+  # NFC read/write/wipe.
+  nfc_manager: ^4.2.1
+
+  # Crash reporting (opt-in, SaaS). No dio integration is registered (see SPEC §6.9).
+  sentry_flutter: ^8.14.2
+
+  # mDNS discovery for Hue bridges.
+  multicast_dns: ^0.3.3
+
+  # Typography (Nunito) and iconography (Material Symbols Outlined) per SPEC §6.7.
+  google_fonts: ^8.0.2
+  material_symbols_icons: ^4.2928.1
+
+  # Localization helpers.
+  intl: ^0.20.2
+
+  # Default Flutter template dep; retained for standard Material icon support.
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Drift codegen.
+  drift_dev: ^2.32.1
+  build_runner: ^2.13.1
+
+# Pin win32 to the 5.x line — 6.x triggers Dart's experimental native-asset
+# build hooks which fail on some Windows dev environments. Revisit when
+# Flutter's native-asset support stabilizes.
+dependency_overrides:
+  win32: ^5.13.0
+
+flutter:
+  uses-material-design: true
+  # Enables `flutter gen-l10n` based on l10n.yaml.
+  generate: true

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto Backup rules (Android 6–11). Per SPEC §6.10:
+    - Include: files/huetap.db (Drift database: Bridges metadata, Scenes,
+      CardBindings, TapLogs, Settings).
+    - Exclude: files/no_backup/ (bridge application keys + cert fingerprints,
+      already excluded by convention; listed explicitly as defense-in-depth).
+
+  Kept semantically identical to data_extraction_rules.xml for v1 to avoid
+  divergence as the targetSdk is bumped over time.
+-->
+<full-backup-content>
+    <include domain="file" path="huetap.db"/>
+    <exclude domain="file" path="no_backup/"/>
+</full-backup-content>
