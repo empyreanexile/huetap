@@ -18,8 +18,12 @@ void main() {
   late _FakeBridge bridge;
 
   setUpAll(() async {
-    final which = await Process.run('where', ['openssl'], runInShell: true);
-    if (which.exitCode != 0) {
+    // Probe openssl directly — `where` is Windows, `which` is Unix. Calling the
+    // tool itself works on both.
+    final probe = await Process.run('openssl', [
+      'version',
+    ], runInShell: true);
+    if (probe.exitCode != 0) {
       markTestSkipped('openssl not on PATH');
       return;
     }
