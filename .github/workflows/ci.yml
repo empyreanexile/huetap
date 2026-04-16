@@ -21,6 +21,9 @@ jobs:
 
       - run: flutter --version
       - run: flutter pub get
-      - run: dart format --output=none --set-exit-if-changed .
+      # Drift schema codegen. Must run before analyze/test — `.g.dart` files are gitignored.
+      - run: dart run build_runner build --delete-conflicting-outputs
+      # Exclude generated files from the format check (build_runner output is not `dart format`-clean).
+      - run: dart format --output=none --set-exit-if-changed $(find lib test -name '*.dart' -not -name '*.g.dart' -not -name '*.freezed.dart')
       - run: flutter analyze
       - run: flutter test
